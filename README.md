@@ -16,3 +16,5 @@ Validação:
 As regras ficam nos modelos por meio de DataAnnotations. As páginas utilizam EditForm,
 DataAnnotationsValidator, ValidationMessage e OnValidSubmit. Os formulários só incluem
 registros válidos nas tabelas e são reinicializados após cada cadastro bem-sucedido.
+
+Autor: Natália da Silva Fernandes
