@@ -1,0 +1,96 @@
+@page "/categorias"
+
+<PageTitle>Categorias</PageTitle>
+
+<h3 class="mb-4">Categorias</h3>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card card-body">
+            <h5 class="card-title mb-3">Cadastrar categoria</h5>
+
+            <EditForm @key="contextoFormulario" EditContext="contextoFormulario"
+                      OnValidSubmit="AdicionarCategoria">
+                <DataAnnotationsValidator />
+
+                <div class="mb-3">
+                    <label for="nomeCategoria" class="form-label">Nome</label>
+                    <InputText id="nomeCategoria" class="form-control"
+                               @bind-Value="categoriaAtual.Nome" />
+                    <ValidationMessage For="@(() => categoriaAtual.Nome)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="quantidadeCategoria" class="form-label">Quantidade</label>
+                    <InputNumber id="quantidadeCategoria" class="form-control"
+                                 @bind-Value="categoriaAtual.Quantidade" min="0" max="100000" />
+                    <ValidationMessage For="@(() => categoriaAtual.Quantidade)" />
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    Adicionar categoria
+                </button>
+            </EditForm>
+
+            <small class="text-muted mt-3">
+                Regra adicional: o nome pode ter no máximo 50 caracteres, evitando descrições excessivamente longas.
+            </small>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card card-body">
+            <h5 class="card-title mb-3">Categorias cadastradas</h5>
+
+            @if (categorias.Count == 0)
+            {
+                <p class="text-muted mb-0">Nenhuma categoria cadastrada.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in categorias)
+                            {
+                                <tr>
+                                    <td>@item.Nome</td>
+                                    <td>@item.Quantidade</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private Categoria categoriaAtual = new();
+    private EditContext contextoFormulario = default!;
+    private readonly List<Categoria> categorias = new();
+
+    protected override void OnInitialized()
+    {
+        contextoFormulario = new EditContext(categoriaAtual);
+    }
+
+    private void AdicionarCategoria()
+    {
+        categorias.Add(new Categoria
+        {
+            Nome = categoriaAtual.Nome.Trim(),
+            Quantidade = categoriaAtual.Quantidade
+        });
+
+        categoriaAtual = new Categoria();
+        contextoFormulario = new EditContext(categoriaAtual);
+    }
+}
